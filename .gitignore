@@ -1,0 +1,15 @@
+**/*.exe
+**/*.out
+**/*.lib
+**/*.a
+**/*.dll
+**/*.so
+**/*.o
+**/*.obj
+
+**/.idea/
+**/.vscode/
+**/output/
+**/build/
+**/bin/
+**/lib/
