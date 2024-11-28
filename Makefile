@@ -42,6 +42,6 @@ ${OBJ_DIR}/%.debug.o: ${SRC_DIR}/%.cc
 
 clean:
 	${RM} -rf ${TARGET} ${OBJ_FILES}
-	${RM} -rf ${TARGET_DEBUG} {OBJ_FILES_DEBUG}
+	${RM} -rf ${TARGET_DEBUG} ${OBJ_FILES_DEBUG}
 
 .PHONY: all clean debug release
