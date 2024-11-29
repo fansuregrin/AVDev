@@ -41,6 +41,7 @@ std::unique_ptr<StreamInfo> MediaFile::getStreamInfo(int streamIdx) const {
         auto videoInfo = std::make_unique<VideoStreamInfo>();
         videoInfo->width = codecpar->width;
         videoInfo->height = codecpar->height;
+        videoInfo->format = static_cast<AVPixelFormat>(codecpar->format);
         info = std::move(videoInfo);
     } else if (codecpar->codec_type == AVMEDIA_TYPE_AUDIO) {
         auto audioInfo = std::make_unique<AudioStreamInfo>();
@@ -50,6 +51,7 @@ std::unique_ptr<StreamInfo> MediaFile::getStreamInfo(int streamIdx) const {
 #else
         audioInfo->channels = codecpar->channels;
 #endif
+        audioInfo->format = static_cast<AVSampleFormat>(codecpar->format);
         info = std::move(audioInfo);
     } else {
         info = std::make_unique<StreamInfo>();
@@ -58,6 +60,9 @@ std::unique_ptr<StreamInfo> MediaFile::getStreamInfo(int streamIdx) const {
     info->codecType = codecpar->codec_type;
     info->codecId = codecpar->codec_id;
     info->bitRate = codecpar->bit_rate;
+    info->duration = st->duration * st->time_base.num * 1000
+        / st->time_base.den;
+    info->nb_frames = st->nb_frames;
 
     return info;
 }

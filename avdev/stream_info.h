@@ -17,6 +17,8 @@ public:
     AVMediaType codecType;
     AVCodecID codecId;
     int64_t bitRate;
+    int64_t duration; // in milliseconds
+    int64_t nb_frames;
 };
 
 class VideoStreamInfo : public StreamInfo {
@@ -25,14 +27,17 @@ public:
 
     int width;
     int height;
+    AVPixelFormat format;
 };
 
 class AudioStreamInfo : public StreamInfo {
 public:
     virtual std::string toStr() const;
+    std::string getFormat() const;
 
     int sampleRate;
     int channels;
+    AVSampleFormat format;
 };
 
 std::ostream &operator<<(std::ostream &os, const StreamInfo &streamInfo);
