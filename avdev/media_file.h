@@ -46,9 +46,13 @@ public:
         return fmtCtx_->bit_rate;
     }
 
-    int64_t bitRate(int streamIdx) const;
+    int64_t bitRate(unsigned int streamIdx) const;
 
-    std::unique_ptr<StreamInfo> getStreamInfo(int streamIdx) const;
+    const AVCodecParameters *getAVCodecParams(unsigned int streamIdx) const;
+
+    const AVCodecParameters *getAVCodecParams(AVMediaType type) const;
+
+    std::unique_ptr<StreamInfo> getStreamInfo(unsigned int streamIdx) const;
 
     std::unique_ptr<StreamInfo> getStreamInfo(AVMediaType type) const;
 

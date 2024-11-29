@@ -19,25 +19,31 @@ public:
         close();
     }
    
-    bool open(const AVCodecParameters *params);
     Status decode(const AVPacket *packet, AVFrame *frame);
-    void close();
+    bool isOpen() const {
+        return isOpen_;
+    }
 
 protected:
-    explicit Decoder(const AVCodecID codecId);
+    explicit Decoder(const AVCodecParameters *params);
 
     AVCodec *dec_;
     AVCodecContext *decCtx_;
+    bool isOpen_;
+
+private:
+    bool open(const AVCodecParameters *params);
+    void close();
 };
 
 class VideoDecoder : public Decoder {
 public:
-    explicit VideoDecoder(const AVCodecID codecId);
+    explicit VideoDecoder(const AVCodecParameters *params);
 };
 
 class AudioDecoder : public Decoder {
 public:
-    explicit AudioDecoder(const AVCodecID codecId);
+    explicit AudioDecoder(const AVCodecParameters *params);
 };
 
 #endif // AVDEV_DECODER_H

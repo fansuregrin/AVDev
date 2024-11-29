@@ -18,19 +18,30 @@ MediaFile::~MediaFile() {
     }
 }
 
-int64_t MediaFile::bitRate(int streamIdx) const {
-    if (streamIdx < 0 || 
-        static_cast<unsigned int>(streamIdx) >= fmtCtx_->nb_streams) {
+int64_t MediaFile::bitRate(unsigned int streamIdx) const {
+    if (streamIdx < 0 || streamIdx >= fmtCtx_->nb_streams) {
         return 0;
     }
     AVStream *st = fmtCtx_->streams[streamIdx];
     return st->codecpar->bit_rate;
 }
 
-std::unique_ptr<StreamInfo> MediaFile::getStreamInfo(int streamIdx) const {
-    if (streamIdx < 0 || 
-        static_cast<unsigned int>(streamIdx) >= fmtCtx_->nb_streams) {
-        throw std::out_of_range("invalid stream index");
+const AVCodecParameters *MediaFile::getAVCodecParams(unsigned int streamIdx) const {
+    if (streamIdx < 0 || streamIdx >= fmtCtx_->nb_streams) {
+        return nullptr;
+    }
+
+    return fmtCtx_->streams[streamIdx]->codecpar;
+}
+
+const AVCodecParameters *MediaFile::getAVCodecParams(AVMediaType type) const {
+    auto idx = av_find_best_stream(fmtCtx_, type, -1, -1, nullptr, 0);
+    return getAVCodecParams(idx);
+}
+
+std::unique_ptr<StreamInfo> MediaFile::getStreamInfo(unsigned int streamIdx) const {
+    if (streamIdx < 0 || streamIdx >= fmtCtx_->nb_streams) {
+        return nullptr;
     }
     
     AVStream *st = fmtCtx_->streams[streamIdx];
@@ -68,6 +79,6 @@ std::unique_ptr<StreamInfo> MediaFile::getStreamInfo(int streamIdx) const {
 }
 
 std::unique_ptr<StreamInfo> MediaFile::getStreamInfo(AVMediaType type) const {
-    int idx = av_find_best_stream(fmtCtx_, type, -1, -1, nullptr, 0);
+    auto idx = av_find_best_stream(fmtCtx_, type, -1, -1, nullptr, 0);
     return getStreamInfo(idx);
 }

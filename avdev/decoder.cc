@@ -1,13 +1,21 @@
 #include <avdev/decoder.h>
 
-Decoder::Decoder(const AVCodecID codecId)
+Decoder::Decoder(const AVCodecParameters *params)
 : dec_(nullptr), decCtx_(nullptr) {
-    dec_ = avcodec_find_decoder(codecId);
-    assert(dec_ != nullptr);
+    isOpen_ = open(params) ? true : false;
 }
 
 
 bool Decoder::open(const AVCodecParameters *params) {
+    if (params == nullptr) {
+        return false;
+    }
+
+    dec_ = avcodec_find_decoder(params->codec_id);
+    if (dec_ == nullptr) {
+        return false;
+    }
+
     decCtx_ = avcodec_alloc_context3(dec_);
     if (decCtx_ == nullptr) {
         return false;
@@ -30,6 +38,8 @@ bool Decoder::open(const AVCodecParameters *params) {
 
 
 Decoder::Status Decoder::decode(const AVPacket *packet, AVFrame *frame) {
+    if (!isOpen_) return Status::FAILURE;
+
     int ret;
     
     ret = avcodec_send_packet(decCtx_, packet);
@@ -54,14 +64,15 @@ void Decoder::close() {
         avcodec_free_context(&decCtx_);
         decCtx_ = nullptr;
     }
+    isOpen_ = false;
 }
 
-VideoDecoder::VideoDecoder(const AVCodecID codecId)
-: Decoder(codecId) {
+VideoDecoder::VideoDecoder(const AVCodecParameters *params)
+: Decoder(params) {
 
 }
 
-AudioDecoder::AudioDecoder(const AVCodecID codecId)
-: Decoder(codecId) {
+AudioDecoder::AudioDecoder(const AVCodecParameters *params)
+: Decoder(params) {
 
 }
