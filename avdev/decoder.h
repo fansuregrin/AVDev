@@ -2,6 +2,7 @@
 #define AVDEV_DECODER_H
 
 #include <cassert>
+#include <avdev/ptr.h>
 extern "C" {
 #include <libavcodec/avcodec.h>
 }
@@ -19,7 +20,7 @@ public:
         close();
     }
    
-    Status decode(const AVPacket *packet, AVFrame *frame);
+    Status decode(const AVPacketPtr &packet, const AVFramePtr &frame);
     bool isOpen() const {
         return isOpen_;
     }

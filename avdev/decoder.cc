@@ -37,17 +37,17 @@ bool Decoder::open(const AVCodecParameters *params) {
 }
 
 
-Decoder::Status Decoder::decode(const AVPacket *packet, AVFrame *frame) {
+Decoder::Status Decoder::decode(const AVPacketPtr &packet, const AVFramePtr &frame) {
     if (!isOpen_) return Status::FAILURE;
 
     int ret;
     
-    ret = avcodec_send_packet(decCtx_, packet);
+    ret = avcodec_send_packet(decCtx_, packet.get());
     if (ret < 0) {
         return Status::FAILURE;
     }
     
-    ret = avcodec_receive_frame(decCtx_, frame);
+    ret = avcodec_receive_frame(decCtx_, frame.get());
     if (ret == AVERROR_EOF) {
         return Status::END;
     } else if (ret == AVERROR(EAGAIN)) {

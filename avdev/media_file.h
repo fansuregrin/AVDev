@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 #include <avdev/stream_info.h>
+#include <avdev/ptr.h>
 extern "C" {
 #include <libavformat/avformat.h>
 #include <libavutil/avutil.h>
@@ -59,6 +60,10 @@ public:
     std::string formatName() const {
         return fmtCtx_->iformat->name;
     }
+
+    AVMediaType getMediaType(unsigned int streamIdx) const;
+
+    AVPacketPtr getPacket();
 
 private:
     AVFormatContext *fmtCtx_;

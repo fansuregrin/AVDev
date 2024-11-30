@@ -82,3 +82,19 @@ std::unique_ptr<StreamInfo> MediaFile::getStreamInfo(AVMediaType type) const {
     auto idx = av_find_best_stream(fmtCtx_, type, -1, -1, nullptr, 0);
     return getStreamInfo(idx);
 }
+
+AVMediaType MediaFile::getMediaType(unsigned int streamIdx) const {
+    if (streamIdx < 0 || streamIdx >= fmtCtx_->nb_streams) {
+        throw std::out_of_range("invalid stream index");
+    }
+
+    return fmtCtx_->streams[streamIdx]->codecpar->codec_type;
+}
+
+AVPacketPtr MediaFile::getPacket() {
+    AVPacket *pkt = av_packet_alloc();
+    if (av_read_frame(fmtCtx_, pkt) < 0) {
+        av_packet_free(&pkt);
+    }
+    return AVPacketPtr(pkt);
+}
