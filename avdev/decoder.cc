@@ -72,6 +72,28 @@ VideoDecoder::VideoDecoder(const AVCodecParameters *params)
 
 }
 
+std::vector<uint8_t> VideoDecoder::convertFrameToRGBA(const AVFramePtr &frame) {
+    if (frame == nullptr) return std::vector<uint8_t>();
+    
+    int width = frame->width, height = frame->height;
+    SwsContext *ctx = sws_getContext(
+        width, height, static_cast<AVPixelFormat>(frame->format),
+        width, height, AV_PIX_FMT_RGBA, 0, nullptr, nullptr, nullptr
+    );
+    if (ctx == nullptr) {
+        return std::vector<uint8_t>();
+    }
+
+    int numBytes = av_image_get_buffer_size(AV_PIX_FMT_RGBA, width, height, 1);
+    std::vector<uint8_t> buffer(numBytes, 0);
+    uint8_t * dstData[AV_NUM_DATA_POINTERS] = {buffer.data()};
+    int dstLinesize[AV_NUM_DATA_POINTERS] = {width * 4};
+    sws_scale(ctx, frame->data, frame->linesize, 0, height, dstData, dstLinesize);
+    sws_freeContext(ctx);
+
+    return buffer;
+}
+
 AudioDecoder::AudioDecoder(const AVCodecParameters *params)
 : Decoder(params) {
 

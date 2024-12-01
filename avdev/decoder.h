@@ -3,8 +3,11 @@
 
 #include <cassert>
 #include <avdev/ptr.h>
+#include <vector>
 extern "C" {
 #include <libavcodec/avcodec.h>
+#include <libswscale/swscale.h>
+#include <libavutil/imgutils.h>
 }
 
 class Decoder {
@@ -40,6 +43,8 @@ private:
 class VideoDecoder : public Decoder {
 public:
     explicit VideoDecoder(const AVCodecParameters *params);
+
+    static std::vector<uint8_t> convertFrameToRGBA(const AVFramePtr &frame);
 };
 
 class AudioDecoder : public Decoder {

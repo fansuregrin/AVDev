@@ -3,7 +3,7 @@ PLATFORM = $(shell ${ROOT_DIR}/systype.sh)
 include ${ROOT_DIR}/${PLATFORM}.defines.mk
 
 INCLUDE_PATH += -I${ROOT_DIR}
-LIB += -lavdev
+LIB := -lavdev ${LIB}
 SRC_DIR = ${ROOT_DIR}/avdev/tests
 BIN_DIR_DEBUG = ${ROOT_DIR}/output/bin/debug
 BIN_DIR_RELEASE = ${ROOT_DIR}/output/bin/release

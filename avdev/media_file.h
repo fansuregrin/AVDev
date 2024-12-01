@@ -65,6 +65,10 @@ public:
 
     AVPacketPtr getPacket();
 
+    std::string getFilename() {
+        return fmtCtx_->url;
+    }
+
 private:
     AVFormatContext *fmtCtx_;
     Status status_;
