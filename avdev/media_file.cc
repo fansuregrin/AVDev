@@ -1,4 +1,5 @@
 #include <stdexcept>
+#include <algorithm>
 #include <avdev/media_file.h>
 
 MediaFile::MediaFile(const std::string &filepath)
@@ -97,4 +98,14 @@ AVPacketPtr MediaFile::getPacket() {
         av_packet_free(&pkt);
     }
     return AVPacketPtr(pkt);
+}
+
+std::string MediaFile::getFilename(bool withExt) const {
+    std::string url(fmtCtx_->url);
+    auto lastSepPos = url.find_last_of('/', std::string::npos);
+    if (withExt) {
+        return url.substr(lastSepPos + 1);
+    }
+    auto lastDotPos = url.find_last_of('.', std::string::npos);
+    return url.substr(lastSepPos + 1, lastDotPos);
 }

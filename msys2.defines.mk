@@ -9,6 +9,6 @@ CFLAGS = -fdiagnostics-color=always --std=c++17 -Wall
 MACRO =
 INCLUDE_PATH = -I${MSYS_ROOT}\\mingw64\\include\\ffmpeg4.4 \
 	-I${MSYS_ROOT}\\mingw64\\include
-LIB_PATH = -L${MSYS_ROOT}\\mingw64\\bin
-LIB = -lavcodec-58 -lavformat-58 -lswscale-5 -lavutil-56 -llibpng16-16
+LIB_PATH =
+LIB =
 EXE_SUFFIX = .exe

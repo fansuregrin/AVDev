@@ -25,7 +25,7 @@ public:
         return status_;
     }
 
-    unsigned int nbStreams() {
+    unsigned int nbStreams() const {
         return fmtCtx_->nb_streams;
     }
 
@@ -34,7 +34,7 @@ public:
      * 
      * @return `double` Duration of the media file in seconds.
      */
-    double duration() {
+    double duration() const {
         return static_cast<double>(fmtCtx_->duration) / AV_TIME_BASE;
     }
 
@@ -65,9 +65,7 @@ public:
 
     AVPacketPtr getPacket();
 
-    std::string getFilename() {
-        return fmtCtx_->url;
-    }
+    std::string getFilename(bool withExt = true) const;
 
 private:
     AVFormatContext *fmtCtx_;

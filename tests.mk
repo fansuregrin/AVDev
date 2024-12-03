@@ -3,7 +3,8 @@ PLATFORM = $(shell ${ROOT_DIR}/systype.sh)
 include ${ROOT_DIR}/${PLATFORM}.defines.mk
 
 INCLUDE_PATH += -I${ROOT_DIR}
-LIB := -lavdev ${LIB}
+LIB_PATH += -L${MSYS_ROOT}\\mingw64\\bin
+LIB := -lavdev -lavcodec-58 -lavformat-58 -lswscale-5 -lswresample-3 -lavutil-56 -llibpng16-16 ${LIB}
 SRC_DIR = ${ROOT_DIR}/avdev/tests
 BIN_DIR_DEBUG = ${ROOT_DIR}/output/bin/debug
 BIN_DIR_RELEASE = ${ROOT_DIR}/output/bin/release

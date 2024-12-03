@@ -19,6 +19,9 @@ int main() {
         return 1;
     }
 
+    // filename
+    std::cout << "filename: " << mf.getFilename() << std::endl;
+
     // number of streams
     auto nbStreams = mf.nbStreams();
     std::cout << "number of streams: " << nbStreams << std::endl;
