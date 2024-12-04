@@ -107,5 +107,5 @@ std::string MediaFile::getFilename(bool withExt) const {
         return url.substr(lastSepPos + 1);
     }
     auto lastDotPos = url.find_last_of('.', std::string::npos);
-    return url.substr(lastSepPos + 1, lastDotPos);
+    return url.substr(lastSepPos + 1, lastDotPos - lastSepPos - 1);
 }
