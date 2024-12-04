@@ -102,10 +102,16 @@ AVPacketPtr MediaFile::getPacket() {
 
 std::string MediaFile::getFilename(bool withExt) const {
     std::string url(fmtCtx_->url);
-    auto lastSepPos = url.find_last_of('/', std::string::npos);
+    auto lastSepPos = url.find_last_of("/\\");
+    if (lastSepPos == std::string::npos) {
+        lastSepPos = -1;
+    }
     if (withExt) {
         return url.substr(lastSepPos + 1);
     }
     auto lastDotPos = url.find_last_of('.', std::string::npos);
+    if (lastDotPos == std::string::npos || lastDotPos < lastSepPos) {
+        return url.substr(lastSepPos + 1);
+    }
     return url.substr(lastSepPos + 1, lastDotPos - lastSepPos - 1);
 }
