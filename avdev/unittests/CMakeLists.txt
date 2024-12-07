@@ -16,13 +16,14 @@ find_package(PkgConfig REQUIRED)
 if (WIN32)
   if (MSYS)
     set(ENV{PKG_CONFIG_PATH} "C:\\msys64\\mingw64\\lib\\ffmpeg4.4\\pkgconfig")
-  elseif (MINGW)
-    # TODO pkg_config_path of ffmpeg 4.4
+    set(CMAKE_FIND_LIBRARY_SUFFIXES .dll ${CMAKE_FIND_LIBRARY_SUFFIXES})
   endif()
 elseif (LINUX)
-  # TODO
+  set(ENV{PKG_CONFIG_PATH} "/usr/lib/ffmpeg4.4/pkgconfig")
+  set(CMAKE_FIND_LIBRARY_SUFFIXES .so ${CMAKE_FIND_LIBRARY_SUFFIXES})
 elseif (UNIX)
   # TODO
+  set(CMAKE_FIND_LIBRARY_SUFFIXES .so ${CMAKE_FIND_LIBRARY_SUFFIXES})
 endif()
 
 pkg_check_modules(LIBAV REQUIRED IMPORTED_TARGET
@@ -32,7 +33,6 @@ pkg_check_modules(LIBAV REQUIRED IMPORTED_TARGET
   libswscale
   libavutil
 )
-set(CMAKE_FIND_LIBRARY_SUFFIXES .dll ${CMAKE_FIND_LIBRARY_SUFFIXES})
 
 enable_testing()
 
@@ -48,6 +48,3 @@ target_link_libraries(media_file_unittest
 
 include(GoogleTest)
 gtest_discover_tests(media_file_unittest)
-
-# file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/assets)
-# file(COPY ${ROOT_DIR}/assets/test01.mp4 DESTINATION ${PROJECT_BINARY_DIR}/assets/)
